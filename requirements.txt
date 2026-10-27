@@ -5,6 +5,16 @@ faster-whisper>=1.2.1
 huggingface_hub>=0.27
 numpy>=1.26
 
+# Translation engines
+# deep-translator: Google (often blocked) and MyMemory (free daily quota)
+deep-translator>=1.11.4
+# argostranslate pulls stanza -> torch. On a CPU-only machine install torch first:
+#   pip install torch --index-url https://download.pytorch.org/whl/cpu
+argostranslate>=1.11.0
+# OpenAI SDK, also used for any OpenAI-compatible endpoint (base_url)
+openai>=3.0,<4
+python-dotenv>=1.0
+
 # Note: av (PyAV) is pulled in by faster-whisper, but Dubla decodes the audio
 # itself because PyAV 19 (the wheel for Python 3.14) rejects the
 # metadata_errors argument used by faster-whisper's decode_audio().

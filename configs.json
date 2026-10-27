@@ -14,5 +14,13 @@
     "stt_min_pause": 0.35,
     "stt_min_segment": 0.4,
     "stt_max_segment": 12.0,
-    "stt_offline": false
+    "stt_offline": false,
+    "translation_engine": "deep-translator",
+    "deep_translator_backend": "mymemory",
+    "translation_batch_size": 20,
+    "translation_retries": 3,
+    "translation_delay": 0.0,
+    "translation_cleanup_on_error": true,
+    "llm_timeout": 60,
+    "llm_max_retries": 2
 }
