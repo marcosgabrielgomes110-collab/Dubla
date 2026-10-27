@@ -21,8 +21,7 @@ Os caminhos vêm de `configs.json` (`temp_path`, `output_path`), resolvidos a pa
 Uso:
 
 ```python
-from src.Dubla_Input.Link_Movie import GetLinkMovie
-from src.Dubla_Input.Local_Movie import GetLocalMovie
+from src.Dubla_Input import GetLinkMovie, GetLocalMovie
 
 meta = GetLinkMovie("https://www.youtube.com/watch?v=x7X9w_GIm1s").run()
 meta = GetLocalMovie("~/Videos/filme.mkv").run()
