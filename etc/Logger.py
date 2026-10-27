@@ -11,6 +11,7 @@ Usage:
 Every call also appends a line to Data/logs/dubla-<date>.log.
 """
 
+import json
 import os
 import sys
 from datetime import datetime
@@ -59,6 +60,10 @@ def _write_file(level: str, source: str, message: str) -> None:
         pass  # logging never breaks the pipeline
 
 
+def _json_mode() -> bool:
+    return os.environ.get("DUBLA_LOG_JSON") == "1"
+
+
 def log(level: str, message, *, show_source: bool = False) -> None:
     """Write one log line. level: info | ok | warning | error."""
     global _progress_active
@@ -66,6 +71,21 @@ def log(level: str, message, *, show_source: bool = False) -> None:
     tag, color = LEVELS.get(level, LEVELS["info"])
     message = str(message)
     source = _caller()
+
+    if _json_mode():
+        record = {
+            "ts": datetime.now().isoformat(timespec="seconds"),
+            "level": level,
+            "source": source,
+            "message": message,
+        }
+        try:
+            sys.stdout.write(json.dumps(record, ensure_ascii=False) + "\n")
+            sys.stdout.flush()
+        except BrokenPipeError:
+            pass
+        _write_file(level, source, message)
+        return
 
     if _progress_active:
         clear_progress()
@@ -107,6 +127,19 @@ def log_progress(message) -> None:
     """Transient progress line (console only, no log file, no newline)."""
     global _progress_active
     text = str(message)
+    if _json_mode():
+        record = {
+            "ts": datetime.now().isoformat(timespec="seconds"),
+            "level": "progress",
+            "source": "",
+            "message": text.strip(),
+        }
+        try:
+            sys.stdout.write(json.dumps(record, ensure_ascii=False) + "\n")
+            sys.stdout.flush()
+        except BrokenPipeError:
+            pass
+        return
     if _color_enabled():
         sys.stdout.write("\r\033[K" + f"\033[2m{text}{RESET}")
     else:

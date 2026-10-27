@@ -7,6 +7,7 @@ Packages:
     Dubla_Translate     translation (deep-translator, Argos, OpenAI-compatible LLM)
     Dubla_Voicegen      voice generation (Piper, Pocket, Qwen3-TTS, ElevenLabs, eSpeak)
     Dubla_MovieManager  full pipeline, mux and publication (main entry point)
+    Dubla_Api           HTTP API (FastAPI) for the frontend
 
 Utilities:
     etc                 colored logging persisted to Data/logs
