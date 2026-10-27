@@ -54,3 +54,26 @@ TRANSLATION_CLEANUP_ON_ERROR = bool(get_config("translation_cleanup_on_error", T
 ENV_PATH = ROOT / ".env"
 LLM_TIMEOUT = float(get_config("llm_timeout", 60))
 LLM_MAX_RETRIES = int(get_config("llm_max_retries", 2))
+
+# Voice generation
+VOICE_ENGINE = str(get_config("voice_engine", "piper"))
+VOICE_FIT_SPEEDUP_MAX = float(get_config("voice_fit_speedup_max", 1.35))
+VOICE_PAD_SILENCE = bool(get_config("voice_pad_silence", False))
+VOICE_SAMPLE_RATE = int(get_config("voice_sample_rate", 24000))
+VOICE_PARALLEL = bool(get_config("voice_parallel", False))
+VOICE_WORKERS = max(1, min(16, int(get_config("voice_workers", 4))))
+VOICES = get_config("voices", {}) or {}
+
+# Movie mux / publish
+MUX_OVERLAP = str(get_config("mux_overlap", "mix"))
+MUX_VIDEO_CODEC = str(get_config("mux_video_codec", "copy"))
+MUX_AUDIO_BITRATE = str(get_config("mux_audio_bitrate", "192k"))
+MUX_AUDIO_SAMPLE_RATE = int(get_config("mux_audio_sample_rate", 48000))
+MUX_AUDIO_CHANNELS = int(get_config("mux_audio_channels", 2))
+MUX_LOUDNORM = bool(get_config("mux_loudnorm", False))
+PUBLISH_OVERWRITE = bool(get_config("publish_overwrite", False))
+
+
+def voice_setting(engine: str, key: str, default=None):
+    """Read a value from the voices.<engine> block of configs.json."""
+    return (VOICES.get(engine) or {}).get(key, default)

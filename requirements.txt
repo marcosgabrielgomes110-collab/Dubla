@@ -15,6 +15,14 @@ argostranslate>=1.11.0
 openai>=3.0,<4
 python-dotenv>=1.0
 
+# Voice engines
+# espeak-ng is a system binary: sudo pacman -S espeak-ng
+piper-tts>=1.8.0
+pocket-tts>=4.0.1
+elevenlabs>=2.74.1
+scipy>=1.11
+# Qwen3-TTS is optional and heavy: requirements-voice-qwen.txt
+
 # Note: av (PyAV) is pulled in by faster-whisper, but Dubla decodes the audio
 # itself because PyAV 19 (the wheel for Python 3.14) rejects the
 # metadata_errors argument used by faster-whisper's decode_audio().

@@ -1,26 +1,83 @@
 {
     "quality_ytdlp": "720",
     "temp_path": "Data/temp/",
-    "output_path": "Data/movies/",
+    "output_path": "Data/Movies/",
     "Vosk_model_path": "Models/vosk",
     "Whisper_model_path": "Models/whisper",
     "input_language": "en-US",
     "output_language": "pt-BR",
-    "stt_engine": "auto",
+    "stt_engine": "whisper",
     "stt_vosk_model": "auto",
-    "stt_whisper_model": "auto",
+    "stt_whisper_model": "base",
     "stt_whisper_device": "auto",
     "stt_whisper_compute": "auto",
     "stt_min_pause": 0.35,
     "stt_min_segment": 0.4,
     "stt_max_segment": 12.0,
     "stt_offline": false,
-    "translation_engine": "deep-translator",
+    "translation_engine": "argos",
     "deep_translator_backend": "mymemory",
     "translation_batch_size": 20,
     "translation_retries": 3,
     "translation_delay": 0.0,
     "translation_cleanup_on_error": true,
     "llm_timeout": 60,
-    "llm_max_retries": 2
+    "llm_max_retries": 2,
+    "voice_engine": "piper",
+    "voice_fit_speedup_max": 1.35,
+    "voice_pad_silence": false,
+    "voice_sample_rate": 24000,
+    "voice_parallel": false,
+    "voice_workers": 4,
+    "mux_overlap": "mix",
+    "mux_video_codec": "copy",
+    "mux_audio_bitrate": "192k",
+    "mux_audio_sample_rate": 48000,
+    "mux_audio_channels": 2,
+    "mux_loudnorm": false,
+    "publish_overwrite": false,
+    "voices": {
+        "piper": {
+            "path": "Models/piper",
+            "pt": "pt_BR-faber-medium",
+            "en": "en_US-lessac-medium",
+            "es": "es_ES-davefx-medium",
+            "fr": "fr_FR-siwis-medium",
+            "de": "de_DE-thorsten-medium",
+            "it": "it_IT-paola-medium",
+            "ja": "ja_JP-hi_fi_captain-medium",
+            "zh": "zh_CN-huayan-medium"
+        },
+        "pocket": {
+            "path": "Models/pocket",
+            "pt": "rafael",
+            "en": "alba",
+            "es": "lola",
+            "fr": "estelle",
+            "it": "giovanni"
+        },
+        "qwen": {
+            "path": "Models/qwen",
+            "model": "Qwen/Qwen3-TTS-12Hz-0.6B-CustomVoice",
+            "dtype": "float32",
+            "max_new_tokens": 256,
+            "pt": "Ryan",
+            "en": "Ryan"
+        },
+        "elevenlabs": {
+            "model": "eleven_multilingual_v2",
+            "output_format": "mp3_44100_128"
+        },
+        "espeak": {
+            "rate": 175,
+            "pt": "pt-br",
+            "en": "en-us",
+            "es": "es",
+            "fr": "fr-fr",
+            "de": "de",
+            "it": "it",
+            "ja": "ja",
+            "zh": "cmn"
+        }
+    }
 }

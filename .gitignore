@@ -39,6 +39,8 @@ Models/
 *.mov
 *.wav
 *.m4a
+# Keep the small voice previews in the repo
+!voices_preview/*.wav
 
 # Local secrets / per-machine config
 .env

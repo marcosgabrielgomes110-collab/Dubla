@@ -78,8 +78,11 @@ def log(level: str, message, *, show_source: bool = False) -> None:
         line = prefix + message
 
     stream = sys.stderr if level in ("warning", "error") else sys.stdout
-    stream.write(line + "\n")
-    stream.flush()
+    try:
+        stream.write(line + "\n")
+        stream.flush()
+    except BrokenPipeError:
+        pass  # output was piped into something that closed (e.g. | head)
 
     _write_file(level, source, message)
 
