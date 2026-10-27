@@ -3,6 +3,7 @@ import subprocess
 from pathlib import Path
 import yt_dlp
 from src.Dubla_Config import Quality, TempPath, OutputPath
+from etc.Logger import log_error, log_info, log_ok
 
 class GetLinkMovie:
     def __init__(self, url: str):
@@ -40,13 +41,13 @@ class GetLinkMovie:
             OutputPath.mkdir(parents=True, exist_ok=True)
             return True
         except Exception as e:
-            print(f"Error preparing directories: {e}")
+            log_error(f"Error preparing directories: {e}")
             return False
 
     def extract_audio(self):
         """Extract audio from the downloaded video to Temp/<id>/<id>.wav (mono, 16 kHz PCM)."""
         if not self.video_file.exists():
-            print(f"Video file not found: {self.video_file}")
+            log_error(f"Video file not found: {self.video_file}")
             return None
 
         cmd = [
@@ -65,16 +66,16 @@ class GetLinkMovie:
             subprocess.run(cmd, check=True)
             return self.audio_file
         except FileNotFoundError:
-            print("Error extracting audio: ffmpeg not found")
+            log_error("Error extracting audio: ffmpeg not found")
             return None
         except subprocess.CalledProcessError as e:
-            print(f"Error extracting audio: {e}")
+            log_error(f"Error extracting audio: {e}")
             return None
 
     def mute_video(self):
         """Strip the audio track from the downloaded video, keeping only the video stream."""
         if not self.video_file.exists():
-            print(f"Video file not found: {self.video_file}")
+            log_error(f"Video file not found: {self.video_file}")
             return None
 
         # Temporary file must keep the container extension so ffmpeg can pick the format
@@ -94,10 +95,10 @@ class GetLinkMovie:
             muted_file.replace(self.video_file)
             return self.video_file
         except FileNotFoundError:
-            print("Error muting video: ffmpeg not found")
+            log_error("Error muting video: ffmpeg not found")
             return None
         except subprocess.CalledProcessError as e:
-            print(f"Error muting video: {e}")
+            log_error(f"Error muting video: {e}")
             muted_file.unlink(missing_ok=True)
             return None
 
@@ -181,7 +182,7 @@ class GetLinkMovie:
 
                 return self.video_file
         except Exception as e:
-            print(f"Error downloading video: {e}")
+            log_error(f"Error downloading video: {e}")
             return None
 
     def _is_complete(self) -> bool:
@@ -208,9 +209,11 @@ class GetLinkMovie:
 
         # Already processed (video is muted, so never try to re-extract from it)
         if self._is_complete():
+            log_info(f"Already processed: {self.meta}")
             return self.meta
 
         if not self.download():
             return None
 
+        log_ok(f"Done: {self.meta}")
         return self.meta

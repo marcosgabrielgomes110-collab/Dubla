@@ -1,6 +1,6 @@
-"""Entradas de vídeo: download do YouTube e arquivos locais.
+"""Video inputs: YouTube download and local files.
 
-Uso:
+Usage:
     from src.Dubla_Input import GetLinkMovie, GetLocalMovie
 
     meta = GetLinkMovie(url).run()

@@ -1,6 +1,6 @@
-"""Dubla — pipeline de dublagem de vídeos.
+"""Dubla video dubbing pipeline.
 
-Pacotes:
-    Dubla_Config   configuração carregada de configs.json
-    Dubla_Input    entradas de vídeo (download e arquivo local)
+Packages:
+    Dubla_Config   configuration loaded from configs.json
+    Dubla_Input    video inputs (download and local files)
 """

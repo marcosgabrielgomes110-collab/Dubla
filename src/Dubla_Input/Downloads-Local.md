@@ -1,49 +1,49 @@
-# Dubla_Input — entradas de vídeo
+# Dubla_Input — video inputs
 
-Tudo que transforma um vídeo (remoto ou local) no formato que o resto do Dubla consome:
-para cada vídeo é criada a pasta `Data/temp/<id>/` com
+Everything that turns a video (remote or local) into the format the rest of Dubla consumes:
+for each video a folder `Data/temp/<id>/` is created with
 
-| Arquivo | Conteúdo |
+| File | Content |
 | --- | --- |
-| `<id>.mp4` | vídeo **sem áudio** (a faixa de áudio é removida no fim do pipeline) |
-| `<id>.wav` | áudio separado, mono, 16 kHz, PCM s16le |
-| `<id>.json` | metadados + `video_path` e `audio_path` |
+| `<id>.mp4` | video **without audio** (the audio track is removed at the end of the pipeline) |
+| `<id>.wav` | separated audio, mono, 16 kHz, PCM s16le |
+| `<id>.json` | metadata + `video_path` and `audio_path` |
 
-Os caminhos vêm de `configs.json` (`temp_path`, `output_path`), resolvidos a partir da raiz do projeto.
+Paths come from `configs.json` (`temp_path`, `output_path`), resolved from the project root.
 
-## Resumo
+## Summary
 
-| Arquivo | Classe | Entrada | Retorno do `run()` |
+| File | Class | Input | `run()` return |
 | --- | --- | --- | --- |
-| `Link_Movie.py` | `GetLinkMovie` | URL do YouTube (`str`) | `Path` do `<id>.json` — ou `None` em erro |
-| `Local_Movie.py` | `GetLocalMovie` | caminho de um vídeo local (`str` ou `Path`) | `Path` do `<id>.json` — ou `None` em erro |
+| `Link_Movie.py` | `GetLinkMovie` | YouTube URL (`str`) | `Path` of `<id>.json` — or `None` on error |
+| `Local_Movie.py` | `GetLocalMovie` | path to a local video (`str` or `Path`) | `Path` of `<id>.json` — or `None` on error |
 
-Uso:
+Usage:
 
 ```python
 from src.Dubla_Input import GetLinkMovie, GetLocalMovie
 
 meta = GetLinkMovie("https://www.youtube.com/watch?v=x7X9w_GIm1s").run()
-meta = GetLocalMovie("~/Videos/filme.mkv").run()
+meta = GetLocalMovie("~/Videos/movie.mkv").run()
 ```
 
-## `Link_Movie.py` — download do YouTube
+## `Link_Movie.py` — YouTube download
 
-- **Entrada:** URL. O `__init__` já consulta o yt-dlp só para obter o ID do vídeo (não baixa nada).
-- **Fluxo:** `prepare()` → download na qualidade de `configs.json` (`quality_ytdlp`) → extrai `<id>.wav` → remove o áudio do `.mp4` → grava o JSON.
-- **ID:** o próprio ID do YouTube (ex.: `x7X9w_GIm1s`).
-- **Recuperação:** se o `.mp4` local já está mudo (run anterior), força o yt-dlp a baixar de novo, porque o áudio original não existe mais no disco.
-- **Cache:** se vídeo + WAV + JSON já existem, `run()` retorna o JSON na hora, sem rede.
+- **Input:** URL. `__init__` already queries yt-dlp just to get the video ID (downloads nothing).
+- **Flow:** `prepare()` → download at the `configs.json` quality (`quality_ytdlp`) → extract `<id>.wav` → remove the audio from the `.mp4` → write the JSON.
+- **ID:** the YouTube ID itself (e.g. `x7X9w_GIm1s`).
+- **Recovery:** if the local `.mp4` is already muted (previous run), yt-dlp is forced to download it again, because the original audio no longer exists on disk.
+- **Cache:** if video + WAV + JSON already exist, `run()` returns the JSON right away, without network.
 
-## `Local_Movie.py` — vídeo local
+## `Local_Movie.py` — local video
 
-- **Entrada:** caminho de arquivo. `__init__` valida a existência (`FileNotFoundError` se não achar) e calcula o ID.
-- **ID:** SHA-256 do conteúdo, 16 caracteres hex — o mesmo arquivo sempre cai na mesma pasta, mesmo se for renomeado.
-- **Fluxo:** `prepare()` → valida que a origem tem áudio → copia o `.mp4` ou **converte** outros containers (`.mkv`, `.avi`, `.mov`, `.webm`; remux quando o codec cabe em mp4, senão reencode H.264/AAC) → extrai `<id>.wav` → remove o áudio do `.mp4` → grava o JSON.
-- **Original:** nunca é apagado nem movido, apenas copiado.
-- **Cache:** mesma regra do `Link_Movie.py`.
+- **Input:** file path. `__init__` validates it exists (`FileNotFoundError` if missing) and computes the ID.
+- **ID:** SHA-256 of the content, 16 hex characters — the same file always lands in the same folder, even if renamed.
+- **Flow:** `prepare()` → validate that the source has audio → copy the `.mp4` or **convert** other containers (`.mkv`, `.avi`, `.mov`, `.webm`; remux when the codec fits mp4, otherwise re-encode H.264/AAC) → extract `<id>.wav` → remove the audio from the `.mp4` → write the JSON.
+- **Original file:** never deleted or moved, only copied.
+- **Cache:** same rule as `Link_Movie.py`.
 
-## JSON gerado
+## Generated JSON
 
 ```json
 {
@@ -59,9 +59,9 @@ meta = GetLocalMovie("~/Videos/filme.mkv").run()
 }
 ```
 
-- `Local_Movie.py` inclui também `source_path` (arquivo original) e usa `uploader: null`.
-- `file_path` é um alias antigo de `video_path`, mantido por compatibilidade.
+- `Local_Movie.py` also includes `source_path` (original file) and uses `uploader: null`.
+- `file_path` is an old alias of `video_path`, kept for compatibility.
 
-## Pré-requisitos
+## Requirements
 
-`ffmpeg` e `ffprobe` no `PATH` (usados para converter, extrair o áudio, silenciar o vídeo e ler duração/resolução), além de `yt-dlp` para o `Link_Movie.py`.
+`ffmpeg` and `ffprobe` on the `PATH` (used to convert, extract the audio, mute the video and read duration/resolution), plus `yt-dlp` for `Link_Movie.py`.

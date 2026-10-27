@@ -4,6 +4,7 @@ import shutil
 import subprocess
 from pathlib import Path
 from src.Dubla_Config import TempPath, OutputPath
+from etc.Logger import log_error, log_info, log_ok
 
 
 class GetLocalMovie:
@@ -42,7 +43,7 @@ class GetLocalMovie:
             OutputPath.mkdir(parents=True, exist_ok=True)
             return True
         except Exception as e:
-            print(f"Error preparing directories: {e}")
+            log_error(f"Error preparing directories: {e}")
             return False
 
     def _probe(self) -> dict:
@@ -59,7 +60,7 @@ class GetLocalMovie:
             result = subprocess.run(cmd, capture_output=True, text=True, check=True)
             return json.loads(result.stdout)
         except (FileNotFoundError, subprocess.CalledProcessError, json.JSONDecodeError) as e:
-            print(f"Error reading video info: {e}")
+            log_error(f"Error reading video info: {e}")
             return {}
 
     def _has_audio_stream(self, file: Path | None = None) -> bool:
@@ -90,10 +91,11 @@ class GetLocalMovie:
                 shutil.copy2(self.source, self.video_file)
                 return self.video_file
             except OSError as e:
-                print(f"Error copying video: {e}")
+                log_error(f"Error copying video: {e}")
                 return None
 
         # Other containers (mkv, avi, mov, webm, ...) must be converted to mp4
+        log_info(f"Converting {self.source.name} to mp4")
         base = ["ffmpeg", "-y", "-loglevel", "error", "-i", str(self.source)]
         attempts = [
             # Fast path: remux the video track and re-encode only the audio to AAC
@@ -107,19 +109,19 @@ class GetLocalMovie:
                 subprocess.run(cmd, check=True)
                 return self.video_file
             except FileNotFoundError:
-                print("Error converting video: ffmpeg not found")
+                log_error("Error converting video: ffmpeg not found")
                 return None
             except subprocess.CalledProcessError:
                 continue
 
-        print(f"Error converting video: {self.source}")
+        log_error(f"Error converting video: {self.source}")
         self.video_file.unlink(missing_ok=True)
         return None
 
     def extract_audio(self):
         """Extract audio from the video to Temp/<id>/<id>.wav (mono, 16 kHz PCM)."""
         if not self.video_file.exists():
-            print(f"Video file not found: {self.video_file}")
+            log_error(f"Video file not found: {self.video_file}")
             return None
 
         cmd = [
@@ -138,16 +140,16 @@ class GetLocalMovie:
             subprocess.run(cmd, check=True)
             return self.audio_file
         except FileNotFoundError:
-            print("Error extracting audio: ffmpeg not found")
+            log_error("Error extracting audio: ffmpeg not found")
             return None
         except subprocess.CalledProcessError as e:
-            print(f"Error extracting audio: {e}")
+            log_error(f"Error extracting audio: {e}")
             return None
 
     def mute_video(self):
         """Strip the audio track from the video, keeping only the video stream."""
         if not self.video_file.exists():
-            print(f"Video file not found: {self.video_file}")
+            log_error(f"Video file not found: {self.video_file}")
             return None
 
         # Temporary file must keep the container extension so ffmpeg can pick the format
@@ -167,10 +169,10 @@ class GetLocalMovie:
             muted_file.replace(self.video_file)
             return self.video_file
         except FileNotFoundError:
-            print("Error muting video: ffmpeg not found")
+            log_error("Error muting video: ffmpeg not found")
             return None
         except subprocess.CalledProcessError as e:
-            print(f"Error muting video: {e}")
+            log_error(f"Error muting video: {e}")
             muted_file.unlink(missing_ok=True)
             return None
 
@@ -181,7 +183,7 @@ class GetLocalMovie:
 
             # Nothing to extract from a silent source, fail before copying anything
             if not self._has_audio_stream(self.source):
-                print(f"Source has no audio track: {self.source}")
+                log_error(f"Source has no audio track: {self.source}")
                 return None
 
             if not self.import_video():
@@ -227,7 +229,7 @@ class GetLocalMovie:
 
             return self.video_file
         except Exception as e:
-            print(f"Error processing local video: {e}")
+            log_error(f"Error processing local video: {e}")
             return None
 
     def _is_complete(self) -> bool:
@@ -254,9 +256,11 @@ class GetLocalMovie:
 
         # Already processed (video is muted, so never try to re-extract from it)
         if self._is_complete():
+            log_info(f"Already processed: {self.meta}")
             return self.meta
 
         if not self.process():
             return None
 
+        log_ok(f"Done: {self.meta}")
         return self.meta
