@@ -1,2 +1,10 @@
+# ffmpeg/ffprobe are system binaries (not pip packages)
 yt-dlp
-ffmpeg
+vosk>=0.3.45
+faster-whisper>=1.2.1
+huggingface_hub>=0.27
+numpy>=1.26
+
+# Note: av (PyAV) is pulled in by faster-whisper, but Dubla decodes the audio
+# itself because PyAV 19 (the wheel for Python 3.14) rejects the
+# metadata_errors argument used by faster-whisper's decode_audio().

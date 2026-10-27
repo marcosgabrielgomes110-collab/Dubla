@@ -1,22 +1,52 @@
 # Python
 __pycache__/
 *.py[cod]
+*$py.class
 *.egg-info/
+build/
+dist/
 
-# Virtual environment
+# Test / linter caches
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Virtual environments
 .venv/
 venv/
+env/
 
-# Generated data (downloads, extracted audio, metadata)
+# Generated pipeline data (videos, wavs, metadata, logs)
+# Data/logs/dubla-<date>.log lives here too
 Data/
 
-# Models (Vosk / Whisper)
+# Downloaded STT models (Vosk / Whisper) — recreated by Scripts/Download_Models.py
 Models/
 
-# Local secrets
+# Partial downloads and temp files
+*.part
+*.downloads/
+*.tmp
+
+# Media files (large; keep them in Data/)
+*.mp4
+*.mkv
+*.webm
+*.avi
+*.mov
+*.wav
+*.m4a
+
+# Local secrets / per-machine config
 .env
+.env.*
 
 # OS / editor
 .DS_Store
+Thumbs.db
 .idea/
 .vscode/
+*.swp

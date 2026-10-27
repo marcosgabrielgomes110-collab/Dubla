@@ -3,5 +3,16 @@
     "temp_path": "Data/temp/",
     "output_path": "Data/movies/",
     "Vosk_model_path": "Models/vosk",
-    "Whisper_model_path": "Models/whisper"
+    "Whisper_model_path": "Models/whisper",
+    "input_language": "en-US",
+    "output_language": "pt-BR",
+    "stt_engine": "auto",
+    "stt_vosk_model": "auto",
+    "stt_whisper_model": "auto",
+    "stt_whisper_device": "auto",
+    "stt_whisper_compute": "auto",
+    "stt_min_pause": 0.35,
+    "stt_min_segment": 0.4,
+    "stt_max_segment": 12.0,
+    "stt_offline": false
 }
