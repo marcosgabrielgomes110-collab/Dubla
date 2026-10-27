@@ -5,12 +5,15 @@ Run with:
 """
 
 import os
+from pathlib import Path
 
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import JSONResponse
+from fastapi.responses import FileResponse, JSONResponse
+from fastapi.staticfiles import StaticFiles
 
 from src.Dubla_Api import jobs, movies, settings, system
+from src.Dubla_Config import ROOT
 
 VERSION = "1.0.0"
 
@@ -45,12 +48,10 @@ def create_app() -> FastAPI:
             return await call_next(request)
         token = os.getenv("DUBLA_API_TOKEN")
         path = request.url.path
-        public = (
-            path in ("/", "/api/v1/health", "/health")
-            or path.startswith(("/docs", "/redoc", "/openapi.json"))
-        )
-        if token and not public:
-            if request.headers.get("X-API-Token") != token:
+        protected = path.startswith("/api/v1") and path != "/api/v1/health"
+        if token and protected:
+            provided = request.headers.get("X-API-Token") or request.query_params.get("token")
+            if provided != token:
                 return JSONResponse({"detail": "unauthorized"}, status_code=401)
         return await call_next(request)
 
@@ -61,12 +62,35 @@ def create_app() -> FastAPI:
 
     @app.get("/")
     def root() -> dict:
+        frontend = ROOT / "frontend" / "dist" / "index.html"
+        if frontend.is_file():
+            return FileResponse(frontend)
         return {
             "service": "dubla-api",
             "version": VERSION,
             "docs": "/docs",
             "health": "/api/v1/health",
         }
+
+    # Serve the built SPA when frontend/dist exists (production mode)
+    dist = ROOT / "frontend" / "dist"
+    if dist.is_dir():
+        assets = dist / "assets"
+        if assets.is_dir():
+            app.mount("/assets", StaticFiles(directory=assets), name="assets")
+
+        @app.get("/{full_path:path}", include_in_schema=False)
+        def spa(full_path: str):
+            if full_path.startswith(("api/", "docs", "redoc", "openapi.json")):
+                return JSONResponse({"detail": "not found"}, status_code=404)
+            candidate = (dist / full_path).resolve()
+            try:
+                candidate.relative_to(dist.resolve())
+            except ValueError:
+                return JSONResponse({"detail": "not found"}, status_code=404)
+            if full_path and candidate.is_file():
+                return FileResponse(candidate)
+            return FileResponse(dist / "index.html")
 
     return app
 

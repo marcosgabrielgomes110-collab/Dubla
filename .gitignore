@@ -19,6 +19,14 @@ htmlcov/
 venv/
 env/
 
+# Node / frontend
+node_modules/
+frontend/dist/
+.vite/
+
+# Local run state (PIDs and logs from make up)
+.run/
+
 # Generated pipeline data (videos, wavs, metadata, logs)
 # Data/logs/dubla-<date>.log lives here too
 Data/

@@ -19,6 +19,18 @@ Per-module documents live next to the code:
 ## Quick start
 
 ```bash
+make install                # python + npm deps
+make up                     # API + Vite dev in background
+make logs                   # follow both logs
+make stop                   # stop both
+
+make up-prod                # build frontend and serve it from the API
+make all                    # install + build + pytest
+```
+
+Manual:
+
+```bash
 pip install -r requirements.txt
 pip install -r requirements-dev.txt        # tests only
 
@@ -27,6 +39,9 @@ python -m src.Dubla_MovieManager "https://www.youtube.com/watch?v=..."
 
 # API + docs at http://127.0.0.1:8000/docs
 python -m src.Dubla_Api
+
+# frontend (dev) at http://localhost:5173
+cd frontend && npm install && npm run dev
 
 # tests
 pytest

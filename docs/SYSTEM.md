@@ -55,6 +55,7 @@ The JSON is the single source of truth and accumulates the stages:
 | `src/Dubla_Voicegen/` | Piper, Pocket TTS, Qwen3-TTS, ElevenLabs, eSpeak NG; timing fit and voice previews |
 | `src/Dubla_MovieManager/` | timeline mix, ffmpeg mux, publication and JSON path rewriting |
 | `src/Dubla_Api/` | FastAPI app for the frontend (jobs, settings, movies, logs) |
+| `frontend/` | React 19 + Vite + TypeScript UI (dashboard, pipeline, movies, settings) |
 | `etc/Logger.py` | colored terminal logs + daily file in `Data/logs`; JSON mode for the API |
 | `Scripts/` | setup (models/voices/LLM/ElevenLabs), CLI helpers and the end-to-end test |
 
@@ -117,8 +118,25 @@ python Scripts/Voicegen.py Data/temp/<id>/<id>.json --engine piper
 # API
 python -m src.Dubla_Api --port 8000
 
+# frontend (dev, proxies /api to 127.0.0.1:8000)
+cd frontend && npm install && npm run dev
+
+# frontend (build, served by the API at /)
+cd frontend && npm run build
+
 # tests
 pytest
+```
+
+Or through `make`:
+
+```bash
+make up          # API + Vite dev in background
+make up-prod     # build + API serving the SPA
+make status      # PIDs + health
+make logs        # follow .run/api.log and .run/frontend.log
+make stop        # stop both
+make all         # install + build + test
 ```
 
 ## Runtime design

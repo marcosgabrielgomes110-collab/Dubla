@@ -14,7 +14,7 @@ from src.Dubla_Transcribe import transcribe  # noqa: E402
 from src.Dubla_Translate import translate  # noqa: E402
 from src.Dubla_Voicegen import synthesize  # noqa: E402
 
-# Credit: go in 100 seconds - Fireship (https://www.youtube.com/watch?v=x7X9w_GIm1s)
+# Credit: go in 100 seconds - Fireship (https://www.youtube.com/watch?v=446E-r0rXHI)
 URL = "https://www.youtube.com/watch?v=446E-r0rXHI"
 
 

@@ -156,4 +156,5 @@ media; no heavy model is loaded.
 - One job at a time (RAM constraint).
 - In-memory job history (logs persist on disk).
 - No upload endpoint; input is a URL.
-- The API does not serve the frontend bundle (use CORS in development).
+- When `frontend/dist` exists, the API serves the built SPA at `/` (fallback for client routes);
+  in development run Vite separately with CORS.
