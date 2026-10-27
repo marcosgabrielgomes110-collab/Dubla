@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+
+# Virtual environment
+.venv/
+venv/
+
+# Generated data (downloads, extracted audio, metadata)
+Data/
+
+# Models (Vosk / Whisper)
+Models/
+
+# Local secrets
+.env
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/

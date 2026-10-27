@@ -1,0 +1,7 @@
+{
+    "quality_ytdlp": "720",
+    "temp_path": "Data/temp/",
+    "output_path": "Data/movies/",
+    "Vosk_model_path": "Models/vosk",
+    "Whisper_model_path": "Models/whisper"
+}
