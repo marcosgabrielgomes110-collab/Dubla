@@ -7,7 +7,7 @@ __root__ = Path(__file__).parent.parent
 print(f"Adding {__root__} to sys.path")
 sys.path.append(str(__root__))
 
-from src.Dubla_Download.Link_Movie import GetLinkMovie
+from src.Dubla_Input.Link_Movie import GetLinkMovie
 
 # Credit: Python in 100 seconds - Fireship (https://www.youtube.com/watch?v=x7X9w_GIm1s)
 URL = "https://www.youtube.com/watch?v=x7X9w_GIm1s"
