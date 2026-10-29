@@ -113,3 +113,10 @@ make all      # install + build + test
 
 Cobrem API (settings, jobs, filmes, streaming, auth), mux, publicação, merge de segmentos,
 ajuste de duração e logging JSON.
+
+## Licença
+
+[MIT](LICENSE) © 2026 Dubla contributors.
+
+Contribuições: veja [CONTRIBUTING.md](CONTRIBUTING.md) e a
+[política de segurança](SECURITY.md).

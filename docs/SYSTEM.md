@@ -89,18 +89,20 @@ Secrets are **not** in `configs.json`; they live in `.env` (ignored): `LLM_*` an
 ## Install
 
 ```bash
-pip install -r requirements.txt
+pip install -e ".[dev]"
 sudo pacman -S ffmpeg espeak-ng mpv     # system binaries
-pip install -r requirements-dev.txt      # pytest + httpx
 ```
 
 Optional engines:
 
 ```bash
-pip install -r requirements-voice-qwen.txt   # Qwen3-TTS (~2.5 GB model)
+pip install -e ".[qwen]"                     # Qwen3-TTS (~2.5 GB model)
 python Scripts/Setup_Voices.py --engine piper --language pt-BR
 python Scripts/Download_Models.py --language en-US
 ```
+
+Canonical dependencies live in `pyproject.toml`; the `requirements*.txt` files are
+compatibility shims.
 
 ## Commands
 

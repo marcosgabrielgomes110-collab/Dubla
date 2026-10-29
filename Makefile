@@ -5,7 +5,7 @@ RUN_DIR := .run
 PY := .venv/bin/python
 
 .DEFAULT_GOAL := help
-.PHONY: help install build test all run-api run-frontend stop-api stop-frontend stop up up-prod restart status health logs logs-api logs-frontend clean
+.PHONY: help install build test lint hooks all run-api run-frontend stop-api stop-frontend stop up up-prod restart status health logs logs-api logs-frontend clean
 
 help: ## Show this help
 	@printf "Dubla — make targets\n\n"
@@ -23,13 +23,15 @@ help: ## Show this help
 	@printf "  \033[1m%-18s\033[0m %s\n" "make install" "install python + npm dependencies"
 	@printf "  \033[1m%-18s\033[0m %s\n" "make build" "build the frontend (dist/)"
 	@printf "  \033[1m%-18s\033[0m %s\n" "make test" "run pytest"
-	@printf "  \033[1m%-18s\033[0m %s\n" "make all" "install + build + test"
+	@printf "  \033[1m%-18s\033[0m %s\n" "make lint" "ruff check"
+	@printf "  \033[1m%-18s\033[0m %s\n" "make hooks" "install pre-commit hooks"
+	@printf "  \033[1m%-18s\033[0m %s\n" "make all" "install + build + lint + test"
 	@printf "  \033[1m%-18s\033[0m %s\n" "make clean" "stop services and remove .run + frontend/dist"
 
 install: ## Install python and npm dependencies
 	@test -d .venv || python3 -m venv .venv
 	$(PY) -m pip install -q --upgrade pip
-	$(PY) -m pip install -q -r requirements.txt
+	$(PY) -m pip install -q -e ".[dev]"
 	@test -d frontend/node_modules || (cd frontend && npm install --no-audit --no-fund)
 	@echo "dependencies ok"
 
@@ -39,7 +41,13 @@ build: ## Build the frontend into frontend/dist
 test: ## Run the pytest suite
 	$(PY) -m pytest -q
 
-all: install build test ## Prepare everything (deps + build + tests)
+lint: ## Run ruff
+	$(PY) -m ruff check
+
+hooks: ## Install pre-commit hooks
+	$(PY) -m pre_commit install
+
+all: install build lint test ## Prepare everything (deps + build + lint + tests)
 
 run-api: ## Start the API in background
 	@mkdir -p $(RUN_DIR)

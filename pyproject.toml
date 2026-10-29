@@ -1,0 +1,94 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dubla"
+version = "0.1.0"
+description = "Automated video dubbing pipeline: download, speech-to-text, translation, voice generation, mux and publication."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { file = "LICENSE" }
+authors = [{ name = "Marcos Gabriel Gomes" }]
+keywords = ["dubbing", "text-to-speech", "speech-to-text", "translation", "ffmpeg", "whisper"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Multimedia :: Sound/Audio :: Speech",
+    "Topic :: Multimedia :: Video",
+]
+
+dependencies = [
+    "yt-dlp",
+    "vosk>=0.3.45",
+    "faster-whisper>=1.2.1",
+    "huggingface_hub>=0.27",
+    "numpy>=1.26",
+    "deep-translator>=1.11.4",
+    "argostranslate>=1.11.0",
+    "openai>=3.0,<4",
+    "python-dotenv>=1.0",
+    "piper-tts>=1.8.0",
+    "pocket-tts>=4.0.1",
+    "elevenlabs>=2.74.1",
+    "scipy>=1.11",
+    "fastapi>=0.162",
+    "uvicorn[standard]>=0.54",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=9.0",
+    "httpx>=0.28",
+    "ruff>=0.6",
+    "pre-commit>=3.7",
+]
+qwen = [
+    "qwen-tts>=0.1.1",
+    "soundfile>=0.12",
+]
+
+[project.urls]
+Homepage = "https://github.com/marcosgabrielgomes110-collab/Dubla"
+Repository = "https://github.com/marcosgabrielgomes110-collab/Dubla"
+Issues = "https://github.com/marcosgabrielgomes110-collab/Dubla/issues"
+Documentation = "https://github.com/marcosgabrielgomes110-collab/Dubla/tree/main/docs"
+
+[project.scripts]
+dubla = "src.Dubla_MovieManager.__main__:main"
+dubla-api = "src.Dubla_Api.__main__:main"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["src*", "etc*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
+
+[tool.ruff]
+line-length = 120
+target-version = "py310"
+exclude = [".venv", "frontend", "Data", "Models", "docs"]
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F"]
+ignore = ["E501"]
+
+[tool.ruff.lint.isort]
+known-first-party = ["src", "etc"]
+
+[tool.coverage.run]
+source = ["src", "etc"]
+omit = ["*/__main__.py"]

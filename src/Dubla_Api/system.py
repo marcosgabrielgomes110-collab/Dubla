@@ -1,12 +1,10 @@
 """System info, logs, voice previews and secret management."""
 
 import importlib.util
-import json
 import os
 import shutil
 import socket
 import sys
-from pathlib import Path
 
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse

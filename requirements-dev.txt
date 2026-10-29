@@ -1,3 +1,2 @@
-# Development / tests
-pytest>=9.0
-httpx>=0.28
+# Compatibility shim: canonical dev dependencies live in pyproject.toml
+-e .[dev]

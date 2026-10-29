@@ -6,14 +6,13 @@ block duration and records the result in the `voice` block of the project json.
 """
 
 import json
-import shutil
 import subprocess
 import threading
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import datetime
 from pathlib import Path
 
-from etc.Logger import log_error, log_info, log_ok, log_warning
+from etc.Logger import log_error, log_info, log_ok
 from src.Dubla_Config import (
     OUTPUT_LANGUAGE,
     ROOT,

@@ -1,5 +1,4 @@
 import json
-from pathlib import Path
 
 
 def test_health_and_info(client):

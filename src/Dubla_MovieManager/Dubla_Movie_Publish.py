@@ -4,7 +4,7 @@ import re
 import shutil
 from pathlib import Path
 
-from etc.Logger import log_error, log_info, log_ok, log_warning
+from etc.Logger import log_error, log_ok, log_warning
 from src.Dubla_Config import OUTPUT_LANGUAGE, OutputPath, PUBLISH_OVERWRITE
 from src.Dubla_Transcribe.Dubla_Stt_Common import load_meta, save_meta
 

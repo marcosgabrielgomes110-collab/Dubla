@@ -1,7 +1,4 @@
-# Optional: Qwen3-TTS 0.6B CustomVoice (~2.5 GB model, 4-8 GB RAM).
-# Install torch + torchaudio from the CPU index first, otherwise torchaudio from
-# PyPI expects CUDA (libcudart.so) and the import fails:
+# Compatibility shim for the optional Qwen3-TTS engine.
+# Install torch/torchaudio CPU first for CPU-only machines:
 #   pip install torch torchaudio --index-url https://download.pytorch.org/whl/cpu
-# Optional system package for some audio backends: sudo pacman -S sox
-qwen-tts>=0.1.1
-soundfile>=0.12
+-e .[qwen]

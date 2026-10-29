@@ -1,0 +1,13 @@
+* text=auto eol=lf
+
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.wav binary
+*.mp4 binary
+*.mkv binary
+*.webm binary
+*.onnx binary
+
+frontend/package-lock.json linguist-generated=true

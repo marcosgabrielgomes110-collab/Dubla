@@ -31,8 +31,7 @@ make all                    # install + build + pytest
 Manual:
 
 ```bash
-pip install -r requirements.txt
-pip install -r requirements-dev.txt        # tests only
+pip install -e ".[dev]"
 
 # one-shot pipeline from a URL
 python -m src.Dubla_MovieManager "https://www.youtube.com/watch?v=..."
@@ -48,3 +47,4 @@ pytest
 ```
 
 Default engines: **Whisper `base`** (STT), **Argos** (translation) and **Piper** (voice).
+Dependencies are declared in [`pyproject.toml`](https://github.com/marcosgabrielgomes110-collab/Dubla/blob/main/pyproject.toml).

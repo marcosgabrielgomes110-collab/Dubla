@@ -143,7 +143,7 @@ Errors use FastAPI's shape: `{"detail": "..."}`.
 ## Tests
 
 ```bash
-pip install -r requirements-dev.txt
+pip install -e ".[dev]"
 pytest
 ```
 
